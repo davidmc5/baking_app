@@ -21,10 +21,11 @@ public class RecipeActivity extends AppCompatActivity {
 //implements MainAdapter.MovieClickListener {
 
     //declare the variables
-    private static Retrofit retrofit = null;
-    public static final String BASE_URL = "http://go.udacity.com/";
-    private List<Recipe> recipeList;
-    private static final String TAG = RecipeActivity.class.getSimpleName();
+    //private static Retrofit retrofit = null;
+    //public static final String BASE_URL = "http://go.udacity.com/";
+    //private List<Recipe> recipeList;
+
+    //private static final String TAG = RecipeActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +33,12 @@ public class RecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
 
           //retrieve recipes
-        getRecipesData();
+        //getRecipesData();
 
     }
 
 
-
+/*
     public void getRecipesData(){
 
         //create an instance of the API using retrofit
@@ -63,6 +64,9 @@ public class RecipeActivity extends AppCompatActivity {
                 //here we get our recipe list
                 recipeList = response.body();
                 Log.d(TAG, "\n\n NUMBER OF RECIPES RECEIVED: " + recipeList.size() + "\n\n");
+
+                //update the adapter
+                //addData(recipeList);
             }
 
             @Override
@@ -72,5 +76,6 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
     }
+*/
 
 }
