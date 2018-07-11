@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,8 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecipeListFragment extends Fragment {
 
-    //for test only
-    //List<Integer> recipeIds = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8);
 
     RecipeListAdapter mAdapter;
     private static Retrofit retrofit = null;
@@ -44,9 +43,9 @@ public class RecipeListFragment extends Fragment {
         //inflate the listView layout to display all the recipe names
         final View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
-        //get a reference to the listView
+        //get a reference to the listView and attach the click listener
         ListView listView = rootView.findViewById(R.id.recipe_names_view);
-
+        listView.setOnItemClickListener(new OnRecipeClicked());
 
         //create the adapter and bind the data
         if (mAdapter == null) {
@@ -62,6 +61,18 @@ public class RecipeListFragment extends Fragment {
         //return listView;
     }
 
+
+    class OnRecipeClicked implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+           onRecipeClicked(parent, view, position, id);
+        }
+    }
+
+    private void onRecipeClicked(AdapterView<?> parent, View view, int position, long id){
+        //put here what we want it to happen when a list item is clicked
+        Toast.makeText(getContext(), "Recipe Clicked " + position, Toast.LENGTH_LONG).show();
+    }
 
 
     public void getRecipesData(){
@@ -97,7 +108,7 @@ public class RecipeListFragment extends Fragment {
             @Override
             public void onFailure(Call<List<Recipe>> call, Throwable t) {
                 Log.d(TAG, "\n\n FAILURE TO GET RECIPES: " + t.getMessage() + "\n\n");
-                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Network Unavailable", Toast.LENGTH_LONG).show();
             }
         });
     }
