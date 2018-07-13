@@ -43,7 +43,7 @@ public class RecipeListFragment extends Fragment {
     //this interface calls a method in the host activity, onRecipeSelected,
     //to pass the recipe index clicked
     public interface OnRecipeClickListener {
-        void onRecipeSelected(int position);
+        void onRecipeSelected(int position, String recipeName);
     }
 
     @Override
@@ -91,10 +91,14 @@ public class RecipeListFragment extends Fragment {
     }
 
     private void onRecipeClicked(AdapterView<?> parent, View view, int position, long id){
-        //put here what we want it to happen when a list item is clicked
-        //Toast.makeText(getContext(), "Recipe Clicked " + position, Toast.LENGTH_LONG).show();
+        //put here what we want to happen when a recipe is clicked
         //This calls the method onRecipeSelected on the host activity
-        mCallback.onRecipeSelected(position);
+
+        //retrieve the recipe name
+        Recipe recipe = recipeList.get(position);
+        String recipeName = recipe.getName();
+        //send the data to the host activity via the interface callback
+        mCallback.onRecipeSelected(position, recipeName);
     }
 
 

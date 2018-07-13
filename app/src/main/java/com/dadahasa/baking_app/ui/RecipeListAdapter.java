@@ -53,14 +53,12 @@ public class RecipeListAdapter extends BaseAdapter {
         if (convertView == null) {
             //create a new textview to hold the text if there are no recycled ones
             textView = new TextView(mContext);
-
             //define here any layout parameters
+
         }else {
             textView = (TextView) convertView;
         }
-        //textView.setText(mRecipeIds.get(position).toString());
         textView.setText(mRecipeList.get(position).getName());
-
         return textView;
     }
 

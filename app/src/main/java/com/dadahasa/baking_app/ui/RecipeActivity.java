@@ -16,9 +16,12 @@ public class RecipeActivity extends AppCompatActivity implements RecipeListFragm
     }
 
     @Override
-    public void onRecipeSelected(int position) {
-        Toast.makeText(this, "Recipe Clicked " + position, Toast.LENGTH_LONG).show();
+    public void onRecipeSelected(int position, String recipeName) {
+        //start steps activity
         final Intent intent = new Intent(this, StepsActivity.class);
+        //Pass data to steps activity via extras
+        intent.putExtra("recipeName", recipeName);
+        //Start intent
         startActivity(intent);
     }
 }
