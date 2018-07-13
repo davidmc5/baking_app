@@ -1,5 +1,6 @@
 package com.dadahasa.baking_app.ui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -17,5 +18,7 @@ public class RecipeActivity extends AppCompatActivity implements RecipeListFragm
     @Override
     public void onRecipeSelected(int position) {
         Toast.makeText(this, "Recipe Clicked " + position, Toast.LENGTH_LONG).show();
+        final Intent intent = new Intent(this, StepsActivity.class);
+        startActivity(intent);
     }
 }
