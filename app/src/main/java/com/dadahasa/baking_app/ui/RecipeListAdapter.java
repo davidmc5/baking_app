@@ -13,14 +13,12 @@ import java.util.List;
 public class RecipeListAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<Integer> mRecipeIds;
     private List<Recipe> mRecipeList;
 
 
     //constructor
     public RecipeListAdapter(Context context, List<Recipe> recipeList){
         mContext = context;
-        //mRecipeIds = recipeIds;
         mRecipeList = recipeList;
     }
 

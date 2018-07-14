@@ -25,7 +25,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecipeListFragment extends Fragment {
 
-
     RecipeListAdapter mAdapter;
     private static Retrofit retrofit = null;
     public static final String BASE_URL = "http://go.udacity.com/";
@@ -43,7 +42,7 @@ public class RecipeListFragment extends Fragment {
     //this interface calls a method in the host activity, onRecipeSelected,
     //to pass the recipe index clicked
     public interface OnRecipeClickListener {
-        void onRecipeSelected(int position, String recipeName);
+        void onRecipeSelected(Recipe recipe);
     }
 
     @Override
@@ -94,11 +93,10 @@ public class RecipeListFragment extends Fragment {
         //put here what we want to happen when a recipe is clicked
         //This calls the method onRecipeSelected on the host activity
 
-        //retrieve the recipe name
+        //retrieve the recipe clicked
         Recipe recipe = recipeList.get(position);
-        String recipeName = recipe.getName();
         //send the data to the host activity via the interface callback
-        mCallback.onRecipeSelected(position, recipeName);
+        mCallback.onRecipeSelected(recipe);
     }
 
 

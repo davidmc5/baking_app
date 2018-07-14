@@ -1,11 +1,12 @@
 package com.dadahasa.baking_app.ui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
+import android.support.v7.app.AppCompatActivity;
 
 import com.dadahasa.baking_app.R;
+import com.dadahasa.baking_app.model.Recipe;
+import com.google.gson.Gson;
 
 public class RecipeActivity extends AppCompatActivity implements RecipeListFragment.OnRecipeClickListener{
 
@@ -16,11 +17,16 @@ public class RecipeActivity extends AppCompatActivity implements RecipeListFragm
     }
 
     @Override
-    public void onRecipeSelected(int position, String recipeName) {
+    public void onRecipeSelected(Recipe recipe) {
         //start steps activity
         final Intent intent = new Intent(this, StepsActivity.class);
-        //Pass data to steps activity via extras
-        intent.putExtra("recipeName", recipeName);
+
+        //Serialise recipe object
+        Gson gson = new Gson();
+        String recipeStr = gson.toJson(recipe);
+        intent.putExtra("recipe", recipeStr);
+
+
         //Start intent
         startActivity(intent);
     }

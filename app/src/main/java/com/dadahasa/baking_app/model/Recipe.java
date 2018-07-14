@@ -1,10 +1,11 @@
 package com.dadahasa.baking_app.model;
 
-import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Recipe {
+import java.util.List;
+
+public class Recipe{
 
     @SerializedName("id")
     @Expose
