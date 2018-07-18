@@ -2,7 +2,6 @@ package com.dadahasa.baking_app.ui;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import com.dadahasa.baking_app.R;
@@ -33,15 +32,11 @@ public class StepsActivity extends AppCompatActivity {
             String recipeName = recipe.getName();
             setTitle(recipeName);
 
-            //TEST
             //pass recipe to fragment
+            //Capture the fragment instance to call one of its methods
+            StepsFragment fragment = (StepsFragment) getSupportFragmentManager().findFragmentById(R.id.steps_fragment);
 
-            //get a reference to the fragment
-
-            //THIS IS NOT WORKING!!!!!
-            StepsFragment fragment = (StepsFragment) getSupportFragmentManager().findFragmentById(R.id.recipe_steps);
-
-            //Call the fragment method to pass the recipe
+            //Call the fragment method to pass the recipe object
             fragment.setRecipe(recipe);
 
         }
