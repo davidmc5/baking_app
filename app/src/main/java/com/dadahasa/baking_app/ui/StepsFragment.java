@@ -12,10 +12,6 @@ import android.widget.Toast;
 import com.dadahasa.baking_app.R;
 import com.dadahasa.baking_app.model.Recipe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 public class StepsFragment extends Fragment {
 
 
@@ -25,8 +21,7 @@ public class StepsFragment extends Fragment {
     private RecyclerView mRecyclerView = null;
 
     //Data For testing only
-    private List<String> testData = new ArrayList<>(Arrays.asList("Step 1", "Step 2", "Step 3", "Step 4", "Step 5"));
-
+    //private List<String> testData = new ArrayList<>(Arrays.asList("Step 1", "Step 2", "Step 3", "Step 4", "Step 5"));
 
     //mandatory empty constructor
     public StepsFragment(){
@@ -59,13 +54,14 @@ public class StepsFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         //set adapter
-        mAdapter = new StepAdapter(getContext(), testData, new StepAdapter.StepClickListener() {
+        mAdapter = new StepAdapter(getContext(), recipe, new StepAdapter.StepClickListener() {
             @Override
             public void onStepClick(int clickedStepIndex) {
 
                 Toast.makeText(getContext(), "Clicked " + clickedStepIndex, Toast.LENGTH_LONG).show();
             }
         });
+
         mRecyclerView.setAdapter(mAdapter);
 
 

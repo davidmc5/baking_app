@@ -12,8 +12,6 @@ import com.google.gson.Gson;
 
 public class StepsActivity extends AppCompatActivity {
 
-    private StepsFragment fragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
