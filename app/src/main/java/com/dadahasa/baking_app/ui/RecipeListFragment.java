@@ -121,10 +121,13 @@ public class RecipeListFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
 
-                //if (response.isSuccesful() ){
-                //here we get our recipe list
-                recipeList = response.body();
-                Log.d(TAG, "\n\n NUMBER OF RECIPES RECEIVED: " + recipeList.size() + "\n\n");
+                if (response.isSuccessful() ) {
+                    //here we get our recipe list
+                    recipeList = response.body();
+                    Log.d(TAG, "\n\n NUMBER OF RECIPES RECEIVED: " + recipeList.size() + "\n\n");
+                }else {
+                    Toast.makeText(getContext(), "Retrofit Error: " + response.message(), Toast.LENGTH_LONG).show();
+                }
 
                 //update the adapter
                 mAdapter.addData(recipeList);
