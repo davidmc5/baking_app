@@ -23,9 +23,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RecipeListFragment extends Fragment {
+public class RecipeFragment extends Fragment {
 
-    RecipeListAdapter mAdapter;
+    RecipeAdapter mAdapter;
     private static Retrofit retrofit = null;
     public static final String BASE_URL = "http://go.udacity.com/";
     private List<Recipe> recipeList;
@@ -33,7 +33,7 @@ public class RecipeListFragment extends Fragment {
     private static final String TAG = RecipeActivity.class.getSimpleName();
 
     //mandatory empty constructor
-    public RecipeListFragment(){
+    public RecipeFragment(){
     }
 
     //callback to pass the recipe index clicked to the host activity
@@ -69,7 +69,7 @@ public class RecipeListFragment extends Fragment {
 
         //create the adapter and bind the data
         if (mAdapter == null) {
-            mAdapter = new RecipeListAdapter(getContext(), recipeList);
+            mAdapter = new RecipeAdapter(getContext(), recipeList);
             // attach the adapter to ListView
             listView.setAdapter(mAdapter);
             //retrieve data and bind it to the adapter

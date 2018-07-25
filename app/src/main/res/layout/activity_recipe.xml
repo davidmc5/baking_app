@@ -6,6 +6,6 @@
     android:layout_height="match_parent"
     tools:context="com.dadahasa.baking_app.ui.RecipeActivity"
     android:id="@+id/recipe_list_fragment"
-    android:name="com.dadahasa.baking_app.ui.RecipeListFragment">
+    android:name="com.dadahasa.baking_app.ui.RecipeFragment">
 
 </fragment>

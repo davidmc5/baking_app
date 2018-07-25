@@ -70,9 +70,15 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
 
     @Override
     public void onBindViewHolder (StepsViewHolder holder, int position){
-        String stepName = steps.get(position).getShortDescription();
-        String text = stepName;
-        mTextView.setText(text);
+
+        //Display the text "Ingredients" in the first position
+        if ( position == 0){
+            mTextView.setText(context.getResources().getString(R.string.ingredients));
+        }else {
+            String stepName = steps.get(position-1).getShortDescription();
+            String text = position + " - " + stepName;
+            mTextView.setText(text);
+        }
     }
 
     @Override
@@ -80,7 +86,7 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
         if (steps == null){
             return 0;
         }
-        return steps.size();
+        return steps.size()+1;
     }
 
 

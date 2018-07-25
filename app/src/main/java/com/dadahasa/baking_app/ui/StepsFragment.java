@@ -64,7 +64,6 @@ public class StepsFragment extends Fragment {
 
         mRecyclerView.setAdapter(mAdapter);
 
-
         //return the FRAGMENT view to be placed in the list view of the fragment element
         return rootView;
     }

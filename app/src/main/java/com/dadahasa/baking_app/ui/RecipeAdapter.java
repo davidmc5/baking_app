@@ -10,14 +10,14 @@ import com.dadahasa.baking_app.model.Recipe;
 
 import java.util.List;
 
-public class RecipeListAdapter extends BaseAdapter {
+public class RecipeAdapter extends BaseAdapter {
 
     private Context mContext;
     private List<Recipe> mRecipeList;
 
 
     //constructor
-    public RecipeListAdapter(Context context, List<Recipe> recipeList){
+    public RecipeAdapter(Context context, List<Recipe> recipeList){
         mContext = context;
         mRecipeList = recipeList;
     }
