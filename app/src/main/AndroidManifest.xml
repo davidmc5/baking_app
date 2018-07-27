@@ -10,7 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.dadahasa.baking_app.ui.RecipeActivity"
+        <activity android:name="com.dadahasa.baking_app.ui.RecipesActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,13 @@
         <activity android:name=".ui.StepsActivity"
             android:launchMode="singleTop"
             android:label="Recipe Steps"
-            android:parentActivityName=".ui.RecipeActivity">
+            android:parentActivityName=".ui.RecipesActivity">
+        </activity>
+
+        <activity android:name=".ui.IngredientsActivity"
+            android:launchMode="singleTop"
+            android:label="Ingredients"
+            android:parentActivityName=".ui.StepsActivity">
         </activity>
 
     </application>

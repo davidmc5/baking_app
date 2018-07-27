@@ -4,8 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dadahasa.baking_app.ui.RecipeActivity"
+    tools:context="com.dadahasa.baking_app.ui.RecipesActivity"
     android:id="@+id/recipe_list_fragment"
-    android:name="com.dadahasa.baking_app.ui.RecipeFragment">
+    android:name="com.dadahasa.baking_app.ui.RecipesFragment">
 
 </fragment>

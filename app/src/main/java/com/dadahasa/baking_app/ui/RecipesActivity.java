@@ -8,7 +8,7 @@ import com.dadahasa.baking_app.R;
 import com.dadahasa.baking_app.model.Recipe;
 import com.google.gson.Gson;
 
-public class RecipeActivity extends AppCompatActivity implements RecipeFragment.OnRecipeClickListener{
+public class RecipesActivity extends AppCompatActivity implements RecipesFragment.OnRecipeClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -6,29 +6,28 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.dadahasa.baking_app.model.Recipe;
+import com.dadahasa.baking_app.model.Ingredient;
 
 import java.util.List;
 
-public class RecipeAdapter extends BaseAdapter {
+public class IngredientsAdapter extends BaseAdapter {
 
     private Context mContext;
-    private List<Recipe> mRecipeList;
-
+    private List<Ingredient> mIngredients;
 
     //constructor
-    public RecipeAdapter(Context context, List<Recipe> recipeList){
+    public IngredientsAdapter(Context context, List<Ingredient> ingredients){
         mContext = context;
-        mRecipeList = recipeList;
+        mIngredients = ingredients;
     }
 
     //Returns the number of items the adapter will display
     @Override
     public int getCount() {
-        if (mRecipeList == null){
+        if (mIngredients == null){
             return 0;
         }
-        return mRecipeList.size();
+        return mIngredients.size();
     }
 
     //the following two methods are not used
@@ -36,11 +35,11 @@ public class RecipeAdapter extends BaseAdapter {
     public Object getItem(int position) {
         return null;
     }
+
     @Override
     public long getItemId(int position) {
         return 0;
     }
-
 
     //Creates a new TextView for each item referenced by the adapter
     @Override
@@ -51,20 +50,19 @@ public class RecipeAdapter extends BaseAdapter {
         if (convertView == null) {
             //create a new textview to hold the text if there are no recycled ones
             textView = new TextView(mContext);
-            //define here any layout parameters
+            //define here any layout parameters as needed
 
         }else {
             textView = (TextView) convertView;
         }
-        textView.setText(mRecipeList.get(position).getName());
+        float quantityFloat = mIngredients.get(position).getQuantity();
+        String quantity = Float.toString(quantityFloat);
+        String measure = mIngredients.get(position).getMeasure();
+        String ingredient = mIngredients.get(position).getIngredient();
+
+        String ingredientText = String.join("\t\t", quantity, measure, ingredient);
+        textView.setText(ingredientText);
+
         return textView;
     }
-
-    //method to pass the data received to the adapter
-    // this is called by the retrofit method onResponse when new API data is fetched
-    public void addData(List<Recipe> recipeList) {
-        this.mRecipeList = recipeList;
-        notifyDataSetChanged();
-    }
-
 }

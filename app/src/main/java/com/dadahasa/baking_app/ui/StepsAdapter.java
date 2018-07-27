@@ -13,7 +13,7 @@ import com.dadahasa.baking_app.model.Step;
 
 import java.util.List;
 
-public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolder> {
+public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHolder> {
 
     private Context context;
     private TextView mTextView;
@@ -31,10 +31,12 @@ public class StepAdapter extends RecyclerView.Adapter<StepAdapter.StepsViewHolde
     public interface StepClickListener {
         void onStepClick(int clickedStepIndex);
     }
+
+
 //** change List<String> to Recipe
     //Constructor to pass the data object with list of steps from the recipe model
-    //public StepAdapter(Context context, List<String> testData, StepClickListener stepsListener){
-    public StepAdapter(Context context, Recipe recipe, StepClickListener stepsListener){
+    //public StepsAdapter(Context context, List<String> testData, StepClickListener stepsListener){
+    public StepsAdapter(Context context, Recipe recipe, StepClickListener stepsListener){
 
     this.context = context;
         //this.testData = testData;

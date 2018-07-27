@@ -1,5 +1,6 @@
 package com.dadahasa.baking_app.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,14 +11,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.dadahasa.baking_app.R;
+import com.dadahasa.baking_app.model.Ingredient;
 import com.dadahasa.baking_app.model.Recipe;
+import com.google.gson.Gson;
+
+import java.util.List;
 
 public class StepsFragment extends Fragment {
 
 
     Recipe recipe;
 
-    StepAdapter mAdapter = null;
+    StepsAdapter mAdapter = null;
     private RecyclerView mRecyclerView = null;
 
     //Data For testing only
@@ -54,11 +59,27 @@ public class StepsFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         //set adapter
-        mAdapter = new StepAdapter(getContext(), recipe, new StepAdapter.StepClickListener() {
+        mAdapter = new StepsAdapter(getContext(), recipe, new StepsAdapter.StepClickListener() {
+
+            //This is an interface method of the StepsAdapter class to be notified of the position clicked
             @Override
             public void onStepClick(int clickedStepIndex) {
 
                 Toast.makeText(getContext(), "Clicked " + clickedStepIndex, Toast.LENGTH_LONG).show();
+
+                if(clickedStepIndex == 0){
+                    //get ingredients list
+                    List<Ingredient> ingredients = recipe.getIngredients();
+
+                    //Serialise Ingredients list
+                    Gson gson = new Gson();
+                    String ingredientsStr = gson.toJson(ingredients);
+
+                    final Intent intent = new Intent(getContext(), IngredientsActivity.class);
+                    intent.putExtra("ingredients", ingredientsStr);
+
+                    startActivity(intent);
+                }
             }
         });
 
@@ -67,35 +88,6 @@ public class StepsFragment extends Fragment {
         //return the FRAGMENT view to be placed in the list view of the fragment element
         return rootView;
     }
-
-/*
-    //This method is to store the current recipe so it can be retrieved on rotation
-    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-
-        //serialize recipe object
-        Gson gson = new Gson();
-        String recipeStr = gson.toJson(recipe);
-        //Store recipe string
-        outState.putString("recipe", recipeStr);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
-
-        //there is no saved state the first time we run the fragment
-        if (savedInstanceState != null) {
-            //retrieve the recipe JSON string
-            String recipeStr = savedInstanceState.getString("recipe", "Blank");
-
-            //de-serialize recipe JSON back to object
-            Gson gson = new Gson();
-            recipe = gson.fromJson(recipeStr, Recipe.class);
-        }
-    }
-*/
 
     //this is a call back for the host activity to pass the Recipe object to this fragment
     public void setRecipe(Recipe recipeClicked){
