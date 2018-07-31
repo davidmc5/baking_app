@@ -62,7 +62,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             @Override
             public void onClick(View view) {
                 int stepIndex = mStepsViewHolder.getAdapterPosition();
-                //this calls the onStepClick method of the activity (step fragment)
+                //this calls the onStepClick method of the activity (steps fragment)
                 //and passes the defined parameters (the position index in this case)
                 stepsListener.onStepClick(stepIndex);
             }
@@ -73,12 +73,20 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
     @Override
     public void onBindViewHolder (StepsViewHolder holder, int position){
 
+        String text;
+
         //Display the text "Ingredients" in the first position
         if ( position == 0){
             mTextView.setText(context.getResources().getString(R.string.ingredients));
         }else {
             String stepName = steps.get(position-1).getShortDescription();
-            String text = position + " - " + stepName;
+            if (position == 1){
+                //do not use the labels for index zero for the first step -- description)
+                text = stepName;
+
+            }else {
+                text = position - 1 + " - " + stepName;
+            }
             mTextView.setText(text);
         }
     }

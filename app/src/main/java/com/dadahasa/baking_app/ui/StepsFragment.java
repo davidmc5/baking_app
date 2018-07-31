@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.dadahasa.baking_app.R;
 import com.dadahasa.baking_app.model.Ingredient;
 import com.dadahasa.baking_app.model.Recipe;
+import com.dadahasa.baking_app.model.Step;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -45,13 +46,8 @@ public class StepsFragment extends Fragment {
         // in content do not change the layout size of the RecyclerView
         mRecyclerView.setHasFixedSize(true);
 
-
-
         String recipeName = recipe.getName();
         Toast.makeText(getContext(), "Recipe " + recipeName, Toast.LENGTH_LONG).show();
-
-
-
 
 
         //set Layout Manager
@@ -64,8 +60,8 @@ public class StepsFragment extends Fragment {
             //This is an interface method of the StepsAdapter class to be notified of the position clicked
             @Override
             public void onStepClick(int clickedStepIndex) {
-
-                Toast.makeText(getContext(), "Clicked " + clickedStepIndex, Toast.LENGTH_LONG).show();
+                //for testing:
+                //Toast.makeText(getContext(), "Clicked " + clickedStepIndex, Toast.LENGTH_LONG).show();
 
                 if(clickedStepIndex == 0){
                     //get ingredients list
@@ -77,6 +73,20 @@ public class StepsFragment extends Fragment {
 
                     final Intent intent = new Intent(getContext(), IngredientsActivity.class);
                     intent.putExtra("ingredients", ingredientsStr);
+
+                    startActivity(intent);
+                }else{
+                    //collect step data to pass to the intent
+                    List<Step> steps = recipe.getSteps();
+                    //index 0 is for ingredients. Use index-1 to get the correct step
+                    Step step = steps.get(clickedStepIndex-1);
+
+                    //serialize step
+                    Gson gson = new Gson();
+                    String stepJson = gson.toJson(step);
+
+                    final Intent intent = new Intent(getContext(), StepDetailActivity.class);
+                    intent.putExtra("stepJson", stepJson);
 
                     startActivity(intent);
                 }

@@ -30,6 +30,12 @@
             android:parentActivityName=".ui.StepsActivity">
         </activity>
 
+        <activity android:name=".ui.StepDetailActivity"
+            android:launchMode="singleTop"
+            android:label="Step Details"
+            android:parentActivityName=".ui.StepsActivity">
+        </activity>
+
     </application>
 
 </manifest>
