@@ -1,13 +1,21 @@
 package com.dadahasa.baking_app.ui;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dadahasa.baking_app.R;
 import com.dadahasa.baking_app.model.Step;
@@ -25,11 +33,15 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.gson.Gson;
 
+import static android.app.Activity.RESULT_OK;
+
 public class StepDetailFragment extends Fragment {
 
     private PlayerView mPlayerView;
     private SimpleExoPlayer mExoPlayer;
 
+    static int stepIndex;
+    String stepTitle;
     String description;
     String thumbnailURL;
     String videoURL;
@@ -46,24 +58,31 @@ public class StepDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
-        //Retrieve the step data from the bundle
+        //Retrieve the step data from the bundle that was sent from the StepDetailActivity
         if (getArguments() != null){
             String stepJson = getArguments().getString("stepJson");
             //de-serialize step object
             Gson gson = new Gson();
             Step step = gson.fromJson(stepJson, Step.class);
 
+            stepTitle = step.getShortDescription();
             description = step.getDescription();
             thumbnailURL = step.getThumbnailURL();
             videoURL = step.getVideoURL();
+
+            //get the current adapter's step index from the extras
+            stepIndex = getArguments().getInt("stepIndex");
+            //Log.d("stepIndex: ",String.valueOf(stepIndex));
         }
 
         TextView textView = view.findViewById(R.id.step_detail_view);
-        textView.setText(description + "\n" + thumbnailURL + "\n" + videoURL);
+        //textView.setText(description + "\n" + thumbnailURL + "\n" + videoURL);
+        textView.setText(stepTitle + "\n" + "\n" + description);
+
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //TODO
+                //Not used. detail step fields are not clickable.
             }
         });
 
@@ -71,13 +90,48 @@ public class StepDetailFragment extends Fragment {
 
         //initialize the player view
         mPlayerView = view.findViewById(R.id.playerView);
-        initializePlayer(videoURL);
 
         //If there is no video link, remove exoplayer
-        if (videoURL == "") {
+        if (TextUtils.isEmpty(videoURL)) {
             mPlayerView.setVisibility(View.GONE);
+        }else {
+            initializePlayer(videoURL);
         }
-       return view;
+
+        //Set the click listener for the bottom navigation (for previous/next step)
+        BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_navigation);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                        Intent intent = new Intent();
+
+                        switch (item.getItemId()){
+                            case R.id.previousStep:
+                                //Toast.makeText(getActivity(), "Previous", Toast.LENGTH_SHORT).show();
+                                intent.putExtra("MESSAGE",stepIndex-1);
+                                getActivity().setResult(RESULT_OK, intent);
+                                getActivity().finish();//end this activity and return to calling activity
+                                return true;
+
+                            case R.id.nextStep:
+                                Toast.makeText(getActivity(), "Next", Toast.LENGTH_SHORT).show();
+                                intent.putExtra("MESSAGE",stepIndex+1);
+                                getActivity().setResult(RESULT_OK, intent);
+                                getActivity().finish();//end this activity and return to calling activity
+                                return true;
+
+
+                        }
+                        return true;
+                    }
+
+                }
+        );
+
+        return view;
     }
 
 
@@ -122,6 +176,9 @@ public class StepDetailFragment extends Fragment {
         super.onStop();
         releasePlayer();
     }
+
+
+
 
 }
 

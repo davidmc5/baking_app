@@ -16,14 +16,18 @@ public class StepDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_step_detail);
 
-        //retrieve the step data
+        //retrieve the data Extras from the intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             String stepJson = extras.getString("stepJson");
+            int stepIndex = extras.getInt("stepIndex");
 
             //send step string data to the step fragment
+            //Retrtive them in the fragment using
+            //String stepJson = getArguments().getString("stepJson");
             Bundle bundle = new Bundle();
             bundle.putString("stepJson", stepJson);
+            bundle.putInt("stepIndex", stepIndex);
 
             //insert Step Detail fragment into container
             StepDetailFragment stepDetailFragment = new StepDetailFragment();

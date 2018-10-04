@@ -62,7 +62,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepsViewHol
             @Override
             public void onClick(View view) {
                 int stepIndex = mStepsViewHolder.getAdapterPosition();
-                //this calls the onStepClick method of the activity (steps fragment)
+                //this calls the onStepClick method of the stepsFragment
                 //and passes the defined parameters (the position index in this case)
                 stepsListener.onStepClick(stepIndex);
             }

@@ -18,6 +18,9 @@ import com.google.gson.Gson;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+
 public class StepsFragment extends Fragment {
 
 
@@ -25,6 +28,8 @@ public class StepsFragment extends Fragment {
 
     StepsAdapter mAdapter = null;
     private RecyclerView mRecyclerView = null;
+
+    static final int NEXT_REQUEST = 1; //next/previous request code from the detail step
 
     //Data For testing only
     //private List<String> testData = new ArrayList<>(Arrays.asList("Step 1", "Step 2", "Step 3", "Step 4", "Step 5"));
@@ -55,7 +60,7 @@ public class StepsFragment extends Fragment {
         mRecyclerView.setLayoutManager(layoutManager);
 
         //set adapter
-        mAdapter = new StepsAdapter(getContext(), recipe, new StepsAdapter.StepClickListener() {
+        mAdapter = new StepsAdapter( getContext(), recipe, new StepsAdapter.StepClickListener() {
 
             //This is an interface method of the StepsAdapter class to be notified of the position clicked
             @Override
@@ -76,19 +81,22 @@ public class StepsFragment extends Fragment {
 
                     startActivity(intent);
                 }else{
-                    //collect step data to pass to the intent
+                    //collect clicked step data to pass to the intent
                     List<Step> steps = recipe.getSteps();
-                    //index 0 is for ingredients. Use index-1 to get the correct step
+                    //index 0 is reserved to list the ingredients. Recipe steps start at 1 on the adapter
+                    // Use index-1 to get the correct step from the List<steps> starting with zero for the first step.
                     Step step = steps.get(clickedStepIndex-1);
 
-                    //serialize step
+                    //serialize the step object element from List<Steps>
                     Gson gson = new Gson();
                     String stepJson = gson.toJson(step);
 
                     final Intent intent = new Intent(getContext(), StepDetailActivity.class);
                     intent.putExtra("stepJson", stepJson);
-
-                    startActivity(intent);
+                    //we'll use the step index to navigate to previous or next from any detail step.
+                    intent.putExtra("stepIndex",clickedStepIndex-1);
+                    //Toast.makeText(getActivity(), "Step Index is " + String.valueOf(clickedStepIndex), Toast.LENGTH_SHORT).show();
+                    startActivityForResult(intent, NEXT_REQUEST);
                 }
             }
         });
@@ -98,6 +106,43 @@ public class StepsFragment extends Fragment {
         //return the FRAGMENT view to be placed in the list view of the fragment element
         return rootView;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent resultData) {
+        //Check which request we're responding to and that it was successful
+        if (requestCode == NEXT_REQUEST && resultCode == RESULT_OK) {
+            //the user selected to navigate to previous or next step
+            //Check the returned Intent data to see which one
+            if (resultData.hasExtra("MESSAGE")) {
+                int nextStep = resultData.getExtras().getInt("MESSAGE", 1);
+                if (nextStep <0){
+                    nextStep = 0;
+                }
+
+                //call detail step intent with the json data
+                //Toast.makeText(getActivity(), "Returned: " + String.valueOf(nextStep), Toast.LENGTH_SHORT).show();
+                //collect clicked step data to pass to the intent
+                List<Step> steps = recipe.getSteps();
+                Step step = steps.get(nextStep);
+
+                //serialize the step object element from List<Steps>
+                Gson gson = new Gson();
+                String stepJson = gson.toJson(step);
+
+                final Intent intent = new Intent(getContext(), StepDetailActivity.class);
+                intent.putExtra("stepJson", stepJson);
+                //we'll use the step index to navigate to previous or next from any detail step.
+                intent.putExtra("stepIndex", nextStep);
+                //Toast.makeText(getActivity(), "Step Index is " + String.valueOf(clickedStepIndex), Toast.LENGTH_SHORT).show();
+                startActivityForResult(intent, NEXT_REQUEST);
+            }
+        } else {
+            if (resultCode == RESULT_CANCELED) {
+                // Return to the steps list
+            }
+        }
+    }
+
 
     //this is a call back for the host activity to pass the Recipe object to this fragment
     public void setRecipe(Recipe recipeClicked){
