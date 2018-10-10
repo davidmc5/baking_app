@@ -3,6 +3,8 @@ package com.dadahasa.baking_app.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,6 +31,8 @@ public class StepsFragment extends Fragment {
     StepsAdapter mAdapter = null;
     private RecyclerView mRecyclerView = null;
 
+    private boolean twoPane;
+
     static final int NEXT_REQUEST = 1; //next/previous request code from the detail step
 
     //Data For testing only
@@ -52,7 +56,11 @@ public class StepsFragment extends Fragment {
         mRecyclerView.setHasFixedSize(true);
 
         String recipeName = recipe.getName();
-        Toast.makeText(getContext(), "Recipe " + recipeName, Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(), "Recipe " + recipeName, Toast.LENGTH_LONG).show();
+
+        if(twoPane) {
+            Toast.makeText(getContext(), "TWO PANE!!!", Toast.LENGTH_LONG).show();
+        }
 
 
         //set Layout Manager
@@ -75,11 +83,34 @@ public class StepsFragment extends Fragment {
                     //Serialise Ingredients list
                     Gson gson = new Gson();
                     String ingredientsStr = gson.toJson(ingredients);
+//////////////////////////////////////////////////////////////
+                    if (twoPane){
+                        //Will use the two-pane layout for tablets
+                        //Toast.makeText(getContext(), "Clicked " + clickedStepIndex, Toast.LENGTH_SHORT).show();
+                        //display ingredient list on right fragment
+                        //Add a dynamic fragment
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
 
-                    final Intent intent = new Intent(getContext(), IngredientsActivity.class);
-                    intent.putExtra("ingredients", ingredientsStr);
+                        IngredientsFragment ingredientsFragment = new IngredientsFragment();
 
-                    startActivity(intent);
+                        //pass the list of ingredients in a bundle
+                        Bundle b = new Bundle();
+                        b.putString("ingredients", ingredientsStr);
+                        ingredientsFragment.setArguments(b);
+
+                        ft.replace(R.id.step_detail_fragment_container, ingredientsFragment);
+
+                        ft.commit();
+//////////////////////////////////////////////////////////////
+
+                    }else {
+                        //single pane for phones- start a new activity
+                        final Intent intent = new Intent(getContext(), IngredientsActivity.class);
+                        intent.putExtra("ingredients", ingredientsStr);
+                        startActivity(intent);
+                    }
+
                 }else{
                     //collect clicked step data to pass to the intent
                     List<Step> steps = recipe.getSteps();
@@ -145,7 +176,8 @@ public class StepsFragment extends Fragment {
 
 
     //this is a call back for the host activity to pass the Recipe object to this fragment
-    public void setRecipe(Recipe recipeClicked){
+    public void setRecipe(Recipe recipeClicked, boolean mTwoPane){
         recipe = recipeClicked;
+        twoPane = mTwoPane;
     }
 }

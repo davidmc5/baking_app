@@ -117,13 +117,11 @@ public class StepDetailFragment extends Fragment {
                                 return true;
 
                             case R.id.nextStep:
-                                Toast.makeText(getActivity(), "Next", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "Next", Toast.LENGTH_SHORT).show();
                                 intent.putExtra("MESSAGE",stepIndex+1);
                                 getActivity().setResult(RESULT_OK, intent);
                                 getActivity().finish();//end this activity and return to calling activity
                                 return true;
-
-
                         }
                         return true;
                     }
