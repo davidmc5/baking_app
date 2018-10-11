@@ -106,6 +106,9 @@ public class StepDetailFragment extends Fragment {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
+                        //get a new intent instance to pass the clicked previous or next step id
+                        // to host activity as extras
+
                         Intent intent = new Intent();
 
                         switch (item.getItemId()){

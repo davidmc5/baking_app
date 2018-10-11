@@ -46,6 +46,8 @@ public class StepsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 
+
+
         //inflate the layout
         final View rootView = inflater.inflate(R.layout.fragment_steps, container, false);
 
@@ -59,7 +61,7 @@ public class StepsFragment extends Fragment {
         //Toast.makeText(getContext(), "Recipe " + recipeName, Toast.LENGTH_LONG).show();
 
         if(twoPane) {
-            Toast.makeText(getContext(), "TWO PANE!!!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getContext(), "TWO PANE!!!", Toast.LENGTH_LONG).show();
         }
 
 
@@ -111,23 +113,46 @@ public class StepsFragment extends Fragment {
                         startActivity(intent);
                     }
 
-                }else{
-                    //collect clicked step data to pass to the intent
+                }else {
+
+                    //collect clicked step data to pass to the step detail activity
                     List<Step> steps = recipe.getSteps();
-                    //index 0 is reserved to list the ingredients. Recipe steps start at 1 on the adapter
+                    //index 0 is reserved to show the ingredients. Recipe steps start at 1 on the adapter
                     // Use index-1 to get the correct step from the List<steps> starting with zero for the first step.
-                    Step step = steps.get(clickedStepIndex-1);
+                    Step step = steps.get(clickedStepIndex - 1);
 
                     //serialize the step object element from List<Steps>
                     Gson gson = new Gson();
                     String stepJson = gson.toJson(step);
 
-                    final Intent intent = new Intent(getContext(), StepDetailActivity.class);
-                    intent.putExtra("stepJson", stepJson);
-                    //we'll use the step index to navigate to previous or next from any detail step.
-                    intent.putExtra("stepIndex",clickedStepIndex-1);
-                    //Toast.makeText(getActivity(), "Step Index is " + String.valueOf(clickedStepIndex), Toast.LENGTH_SHORT).show();
-                    startActivityForResult(intent, NEXT_REQUEST);
+                    //**//////////////////////////////////////////
+                    //if we are on a two-pane, do not fire an intent!
+
+                    if (twoPane) {
+                        //Will use the two-pane layout for tablets
+                        //Toast.makeText(getContext(), "Clicked " + clickedStepIndex, Toast.LENGTH_SHORT).show();
+                        //display ingredient list on right fragment
+                        //Add a dynamic fragment
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        FragmentTransaction ft = fm.beginTransaction();
+                        StepDetailFragment stepDetailFragment = new StepDetailFragment();
+
+                        //pass the step detail in a bundle and insert the fragment in the UI
+                        Bundle b = new Bundle();
+                        b.putString("stepJson", stepJson);
+                        stepDetailFragment.setArguments(b);
+                        ft.replace(R.id.step_detail_fragment_container, stepDetailFragment);
+                        ft.commit();
+                        //\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                    } else {
+                        //not a tablet --> start a new activity/intent to show the step detail
+                        final Intent intent = new Intent(getContext(), StepDetailActivity.class);
+                        intent.putExtra("stepJson", stepJson);
+                        //we'll use the step index to navigate to previous or next from any detail step.
+                        intent.putExtra("stepIndex", clickedStepIndex - 1);
+                        //Toast.makeText(getActivity(), "Step Index is " + String.valueOf(clickedStepIndex), Toast.LENGTH_SHORT).show();
+                        startActivityForResult(intent, NEXT_REQUEST);
+                    }
                 }
             }
         });
