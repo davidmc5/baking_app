@@ -45,14 +45,6 @@ public class IngredientsFragment extends Fragment {
            ingredients = gson.fromJson(ingredientsStr, new TypeToken<List<Ingredient>>(){}.getType());
         }
 
-//        Bundle b = getArguments();
-//        if (b != null){
-//            String ingredientsStr = b.getString("ingredients");
-//            //de-serialize recipe object
-//            Gson gson = new Gson();
-//            ingredients = gson.fromJson(ingredientsStr, new TypeToken<List<Ingredient>>(){}.getType());
-//        }
-
 
         //create the adapter and bind the data
         if (mAdapter == null) {

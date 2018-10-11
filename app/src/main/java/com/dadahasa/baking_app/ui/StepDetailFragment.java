@@ -1,19 +1,20 @@
 package com.dadahasa.baking_app.ui;
 
 
-import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.gson.Gson;
 
 import static android.app.Activity.RESULT_OK;
+import static android.view.View.GONE;
 
 public class StepDetailFragment extends Fragment {
 
@@ -45,6 +47,7 @@ public class StepDetailFragment extends Fragment {
     String description;
     String thumbnailURL;
     String videoURL;
+    boolean twoPane=false;
 
 
     //mandatory empty constructor
@@ -59,8 +62,15 @@ public class StepDetailFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_step_detail, container, false);
 
         //Retrieve the step data from the bundle that was sent from the StepDetailActivity
-        if (getArguments() != null){
-            String stepJson = getArguments().getString("stepJson");
+        Bundle bundle =getArguments();
+        //if (getArguments() != null){
+        if (bundle != null){
+
+            if (bundle.containsKey("twoPane")){
+                twoPane = getArguments().getBoolean("twoPane");
+            }
+            //String stepJson = getArguments().getString("stepJson");
+            String stepJson = bundle.getString("stepJson");
             //de-serialize step object
             Gson gson = new Gson();
             Step step = gson.fromJson(stepJson, Step.class);
@@ -71,7 +81,8 @@ public class StepDetailFragment extends Fragment {
             videoURL = step.getVideoURL();
 
             //get the current adapter's step index from the extras
-            stepIndex = getArguments().getInt("stepIndex");
+            //stepIndex = getArguments().getInt("stepIndex");
+            stepIndex = bundle.getInt("stepIndex");
             //Log.d("stepIndex: ",String.valueOf(stepIndex));
         }
 
@@ -79,10 +90,11 @@ public class StepDetailFragment extends Fragment {
         //textView.setText(description + "\n" + thumbnailURL + "\n" + videoURL);
         textView.setText(stepTitle + "\n" + "\n" + description);
 
+
         textView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                //Not used. detail step fields are not clickable.
+                //Not used. detail steps are not clickable.
             }
         });
 
@@ -91,15 +103,35 @@ public class StepDetailFragment extends Fragment {
         //initialize the player view
         mPlayerView = view.findViewById(R.id.playerView);
 
+        //get device orientation
+        boolean landscape = false;
+        int orientation = getResources().getConfiguration().orientation;
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            landscape = true;
+        }
+
+        //set player in full screen if in landscape but not on a tablet
+        if (landscape && !twoPane) {
+            ViewGroup.LayoutParams params = mPlayerView.getLayoutParams();
+            params.width = params.MATCH_PARENT;
+            params.height = params.MATCH_PARENT;
+            mPlayerView.setLayoutParams(params);
+        }
+
+
         //If there is no video link, remove exoplayer
         if (TextUtils.isEmpty(videoURL)) {
-            mPlayerView.setVisibility(View.GONE);
+            mPlayerView.setVisibility(GONE);
         }else {
             initializePlayer(videoURL);
         }
 
         //Set the click listener for the bottom navigation (for previous/next step)
         BottomNavigationView bottomNavigationView = view.findViewById(R.id.bottom_navigation);
+        if (twoPane || landscape) {
+            //remove bottom navigation for tablet mode
+            bottomNavigationView.setVisibility(View.GONE);
+        }
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -133,6 +165,7 @@ public class StepDetailFragment extends Fragment {
         );
 
         return view;
+
     }
 
 

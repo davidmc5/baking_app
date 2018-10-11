@@ -139,6 +139,7 @@ public class StepsFragment extends Fragment {
 
                         //pass the step detail in a bundle and insert the fragment in the UI
                         Bundle b = new Bundle();
+                        b.putBoolean("twoPane", twoPane);
                         b.putString("stepJson", stepJson);
                         stepDetailFragment.setArguments(b);
                         ft.replace(R.id.step_detail_fragment_container, stepDetailFragment);
