@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridLayout;
+import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -64,14 +66,17 @@ public class RecipesFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.fragment_recipe_list, container, false);
 
         //get a reference to the listView and attach the click listener
-        ListView listView = rootView.findViewById(R.id.recipe_names_view);
-        listView.setOnItemClickListener(new OnRecipeClicked());
+//        ListView listView = rootView.findViewById(R.id.recipe_names_view);
+//        listView.setOnItemClickListener(new OnRecipeClicked());
+        GridView gridView = rootView.findViewById(R.id.recipe_names_view);
+        gridView.setOnItemClickListener(new OnRecipeClicked());
 
         //create the adapter and bind the data
         if (mAdapter == null) {
             mAdapter = new RecipesAdapter(getContext(), recipeList);
             // attach the adapter to ListView
-            listView.setAdapter(mAdapter);
+//            listView.setAdapter(mAdapter);
+            gridView.setAdapter(mAdapter);
             //retrieve data and bind it to the adapter
             getRecipesData();
         }
