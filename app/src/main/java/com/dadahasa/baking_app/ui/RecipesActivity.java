@@ -18,6 +18,7 @@ public class RecipesActivity extends AppCompatActivity implements RecipesFragmen
 
     @Override
     public void onRecipeSelected(Recipe recipe) {
+        //this method is called by the RecipesFragment's interface OnRecipeClickListener
         //start steps activity
         final Intent intent = new Intent(this, StepsActivity.class);
 
@@ -25,8 +26,6 @@ public class RecipesActivity extends AppCompatActivity implements RecipesFragmen
         Gson gson = new Gson();
         String recipeStr = gson.toJson(recipe);
         intent.putExtra("recipe", recipeStr);
-
-
         //Start intent
         startActivity(intent);
     }

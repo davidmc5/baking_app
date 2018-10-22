@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.dadahasa.baking_app.R;
 import com.dadahasa.baking_app.RecipeApi;
 import com.dadahasa.baking_app.model.Recipe;
+import com.google.gson.Gson;
 
 import java.util.List;
 
@@ -83,7 +84,6 @@ public class RecipesFragment extends Fragment {
 
         //return the FRAGMENT view to be placed in the list view of the fragment element
         return rootView;
-
     }
 
 
@@ -102,6 +102,13 @@ public class RecipesFragment extends Fragment {
         Recipe recipe = recipeList.get(position);
         //send the data to the host activity via the interface callback
         mCallback.onRecipeSelected(recipe);
+        ///////////////////
+        //Serialise the ingredients' list object
+        Gson gson = new Gson();
+        String ingredientsStr = gson.toJson(recipe.getIngredients());
+
+
+        WidgetIntentService.startActionUpdateRecipeWidget(getContext(), ingredientsStr);
     }
 
 
