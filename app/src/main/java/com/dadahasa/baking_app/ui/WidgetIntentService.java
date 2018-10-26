@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.dadahasa.baking_app.BakingWidgetProvider;
+import com.dadahasa.baking_app.R;
 import com.dadahasa.baking_app.model.Ingredient;
 
 import java.util.List;
@@ -52,11 +53,12 @@ public class WidgetIntentService extends IntentService {
         }
     }
 
-    //NOTE: FOR THE FOLLOWING METHOD TO WORK, THIS INTENTSERVICE CLASS (WidgetIntentService.java)
+    //NOTE: FOR THE FOLLOWING METHOD TO WORK, THIS INTENT-SERVICE CLASS (WidgetIntentService.java)
     // NEEDS TO BE DECLARED IN THE MANIFEST LIKE THIS:
     //<service android:name=".ui.WidgetIntentService" />
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
+        //Code inside this method runs on a separate thread from the UI
         //gets the data from the incoming intent
         if (intent != null) {
             final String action = intent.getAction();
@@ -71,22 +73,29 @@ public class WidgetIntentService extends IntentService {
 
 
     /**
-     * Handle action UpdateRecipeWidgets in the provided background thread with the provided
+     * Called by onHandleIntent()
+     * Handle ACTION_UPDATE_RECIPE_WIDGETS in the provided background thread with the provided
      * parameters.
+     *
      * This method collects the recipe to display and updates all existent widgets of this app
-     * and calls the WidgetProvider passing in an instance of the AppWidgetManager, the Widget IDs and the data to be displayed.
+     * by calling the WidgetProvider's updateRecipeWidgets
+     * and passing in an instance of the AppWidgetManager, the Widget IDs and the data to display.
      */
     private void handleActionUpdateRecipeWidgets(String ingredients) {
 
         //for testing
-        //not working
         //Toast.makeText(getBaseContext(), "Ingredient::::: " + ingredients, Toast.LENGTH_SHORT).show();
         //Log.d("INGREDIENTS ||||-----: ", ingredients);
 
 
         //get the ids of all widgets from this app
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        //AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getApplicationContext());
+
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakingWidgetProvider.class));
+
+        //Trigger data update to handle the ListView widgets and force a data refresh
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_list_view);
 
         //update all widgets by calling the update method of the widget provider
         BakingWidgetProvider.updateRecipeWidgets(this, appWidgetManager, appWidgetIds, ingredients);

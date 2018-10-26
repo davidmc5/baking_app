@@ -102,11 +102,12 @@ public class RecipesFragment extends Fragment {
         Recipe recipe = recipeList.get(position);
         //send the data to the host activity via the interface callback
         mCallback.onRecipeSelected(recipe);
+
         ///////////////////
         //Serialise the ingredients' list object
         Gson gson = new Gson();
         String ingredientsStr = gson.toJson(recipe.getIngredients());
-
+        ///////////////////
 
         WidgetIntentService.startActionUpdateRecipeWidget(getContext(), ingredientsStr);
     }
